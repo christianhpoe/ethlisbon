@@ -1,0 +1,6 @@
+build
+package-lock.json
+nuxt-app/node-modules
+nuxt-app/.editorconfig
+nuxt-app/yarn.loc
+node_modules
