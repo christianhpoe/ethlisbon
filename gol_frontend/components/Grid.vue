@@ -1,11 +1,5 @@
 <template>
   <div>
-    <app-stats
-      :current-tick="currentTick"
-      :cell-count="cellCount"
-      :cells-alive="cellsAlive"
-      :cells-created="cellsCreated"
-      :current-speed="currentSpeed"/>
     <div
       class="game-grid columns"
       @mousedown="isMouseDown = true"
@@ -31,11 +25,9 @@
 
 <script>
 import Cell from './Cell.vue';
-import Stats from './Stats.vue';
 export default {
   components: {
     'app-cell': Cell,
-    'app-stats': Stats,
   },
   props: {
     message: {
@@ -53,8 +45,8 @@ export default {
   },
   data() {
     return {
-      width: 46,
-      height: 20,
+      width: 10,
+      height: 10,
       gridList: [],
 
       // Stats that get passed down to the app-stats component
@@ -88,6 +80,10 @@ export default {
         this.importSession();
       } else if (val === 'exportSession') {
         this.exportSession();
+      } else if (val === 'new_input') {
+        this.exportSession();
+      } else if (val === 'new_game') {
+        this.newGame();
       }
     },
   },
@@ -269,6 +265,17 @@ export default {
         }
       }
       this.$emit('exportToken', exportToken);
+    },
+    newGame: function() {
+      let exportToken = '';
+      for (let i = 0; i < this.width; i++) {
+        for (let j = 0; j < this.height; j++) {
+          if (this.gridList[i][j].isAlive) {
+            exportToken += '[' + i + ',' + j + ']';
+          }
+        }
+      }
+      this.$emit("new_game", exportToken)
     },
     /**
      * Updates the current cellcount on each new tick.

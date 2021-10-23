@@ -32,11 +32,14 @@ contract AllGames is ERC721, Ownable {
         } else {
             _laterInputs(_tokenId, _state);
         }
+        emit StateChange(_tokenId, _state, address(games[_tokenId]._gameContract), games[_tokenId]._alive, games[_tokenId]._counterInitialInputs);
     }
 
     function transitionToNewState(uint256 _tokenId) public {
         /// TODO needs game of life logic
         games[_tokenId]._gameContract.mint(msg.sender, 1);
+        emit StateChange(_tokenId, games[_tokenId]._state, address(games[_tokenId]._gameContract), games[_tokenId]._alive, games[_tokenId]._counterInitialInputs);
+
     }
 
     ///DO: Set State to _state; Mint ERC20Token to msg.sender, counter + 1; If counter = 10 game alive
@@ -55,7 +58,11 @@ contract AllGames is ERC721, Ownable {
         /// TODO require payment of ERC20 Tokens  
         /// TODO Burn Tokens by sending to nonce;
         games[_tokenId]._state = _state;
-    } 
+    }
+
+    function lastIndex() public view returns(uint) {
+        return _tokenIdTracker.current();
+    }
     
     function mint(uint256 _state) public onlyOwner {
         OneGame game = new OneGame(100, this, msg.sender);

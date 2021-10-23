@@ -1,83 +1,33 @@
 <template>
-  <div class="box">
-    <div class="field has-addons has-addons-centered is-marginless">
-      <p class="control">
-        <button
-          :disabled="mainComponent !== 'gamePage'"
-          class="button"
-          title="slow down"
-          @click="send('slowDown')">
-          Slow Down
-      </button></p>
-      <p class="control">
-        <button
-          :disabled="mainComponent !== 'gamePage'"
-          :class="isRunning ? 'green' : 'red'"
-          class="button"
-          title="play"
-          @click="send('play')">
-         <span v-show="isRunning" >Stop</span>
-         <span v-show="!isRunning" >Start</span>
-      </button></p>
-      <p class="control">
-        <button
-          :disabled="mainComponent !== 'gamePage'"
-          class="button"
-          title="clear grid"
-          @click="send('redoSession')">
-          <i class="fas fa-redo"/>
-      </button></p>
-      <p class="control">
-        <button
-          :disabled="mainComponent !== 'gamePage'"
-          class="button"
-          title="next step"
-          @click="send('nextStep')">
-          <i class="fas fa-step-forward"/>
-      </button></p>
-      <p class="control">
-        <button
-          :disabled="mainComponent !== 'gamePage'"
-          class="button"
-          title="speed up"
-          @click="send('speedUp')">
-          Speed up
-      </button></p>
-      <p class="control">
-        <button
-          :disabled="mainComponent !== 'gamePage'"
-          class="button"
-          @click="send('randomSeed')">
-          <span class="icon">
-            <i class="fas fa-random"/>
-          </span>
-          <b>Random</b>
-      </button></p>
-    </div>
-    <div class="field has-addons has-addons-centered is-marginless">
-      <p class="control">
-        <button
-          :disabled="mainComponent !== 'gamePage'"
-          class="button"
-          @click="send('importSession')">
-          <span class="icon">
-            <i class="far fa-edit"/>
-          </span>
-          <b>Import</b>
-      </button></p>
-      <p class="control">
-        <button
-          :disabled="mainComponent !== 'gamePage'"
-          class="button"
-          @click="send('exportSession')">
-          <span class="icon">
-            <i class="far fa-save"/>
-          </span>
-          <b>Export</b>
-      </button></p>
-    </div>
-  </div>
-
+  <b-row>
+    <b-button
+      :class="isRunning ? 'btn-danger m-2' : 'btn-success m-2'"
+      title="play"
+      @click="send('play')">
+      <span v-show="isRunning">Stop</span>
+      <span v-show="!isRunning">Play</span>
+    </b-button>
+    <b-button
+      class="btn-success"
+      title="new"
+      @click="send('new_game')">
+      <span >Create New Game Game</span>
+    </b-button>
+    <b-button
+      class='btn-success m-2'
+      v-if="!newGame"
+      title="play"
+      @click="send('set_input')">
+      Set Input
+    </b-button>
+    <b-button
+      class='btn-success m-2'
+      v-if="!newGame"
+      title="play"
+      @click="send('set_next_step')">
+      Transition to next state
+    </b-button>
+  </b-row>
 </template>
 
   <script>
@@ -91,6 +41,10 @@ export default {
       default: 'gamePage',
       type: String,
     },
+    newGame: {
+      default: false,
+      type: Boolean,
+    }
   },
   data() {
     return {};
