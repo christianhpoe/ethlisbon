@@ -30,6 +30,10 @@ export default {
     'app-cell': Cell,
   },
   props: {
+    activeGame: {
+      default: false,
+      type: Boolean,
+    },
     message: {
       default: '',
       type: String,
@@ -48,27 +52,16 @@ export default {
       width: 10,
       height: 10,
       gridList: [],
-
-      // Stats that get passed down to the app-stats component
       currentTick: 0,
       cellCount: 0,
       cellsAlive: 0,
       cellsCreated: 0,
-
-      // A prop that gets used by the app-cell component (drag)
       isMouseDown: false,
     };
   },
   computed: {},
   watch: {
-    /**
-     * Watches for changes in the message prop
-     * that gets passed down from the App component
-     * and then handles the input on a specific tick.
-     *
-     * @param {string} val - the value
-     */
-    message: function(val) {
+    message(val) {
       if (val === 'nextStep') {
         this.update();
         this.currentTick++;
@@ -91,11 +84,8 @@ export default {
     this.cellCalc();
   },
   methods: {
-    /**
-     * Creates a 2D-Array during runtime for
-     * the website to use for most operations.
-     */
-    cellCalc: function() {
+    
+    cellCalc() {
       for (let i = 0; i < this.width; i++) {
         this.gridList[i] = [];
         for (let j = 0; j < this.height; j++) {
@@ -104,29 +94,14 @@ export default {
       }
       this.cellCount = this.width * this.height;
     },
-    /**
-     * Changes the 'isAlive' object property
-     * of a specific cell to the one requested
-     * in the param.
-     *
-     * @param {number} x - the x position
-     * @param {number} y - the y position
-     * @param {boolean} bool - the new boolean
-     */
-    setCell: function(x, y, bool) {
+    setCell(x, y, bool) {
       if (this.gridList[x][y].isAlive != bool) {
         this.gridList[x][y].isAlive = bool;
         this.updateCellCount(bool);
       }
-      // let row = this.gridList[x];
-      // row.splice(y, 1, {isAlive: true});
-      // this.gridList.splice(x, 1, row);
     },
-    /**
-     * The main function that updates the grid
-     * every tick based on the game of life rules.
-     */
-    update: function() {
+    
+    update() {
       let tempArr = [];
       for (let i = 0; i < this.width; i++) {
         tempArr[i] = [];
@@ -134,49 +109,29 @@ export default {
           let status = this.gridList[i][j].isAlive;
           let neighbours = this.getNeighbours(i, j);
           let result = false;
-          // Rule 1:
-          // Any live cell with fewer than two live neighbours dies,
-          // as if by under population
+          
           if (status && neighbours < 2) {
             result = false;
           }
-          // Rule 2:
-          // Any live cell with two or three neighbours lives on
-          // to the next generation
           if ((status && neighbours == 2) || neighbours == 3) {
             result = true;
           }
-          // Rule 3:
-          // Any live cell with more than three live neighbours dies,
-          // as if by overpopulation
           if (status && neighbours > 3) {
             result = false;
           }
-          // Rule 4:
-          // Any dead cell with exactly three live neighbours becomes
-          // a live cell, as if by reproduction
           if (!status && neighbours == 3) {
             result = true;
           }
           tempArr[i][j] = result;
         }
       }
-      // set new gridList content
       for (let i = 0; i < this.width; i++) {
         for (let j = 0; j < this.height; j++) {
           this.setCell(i, j, tempArr[i][j]);
         }
       }
     },
-    /**
-     * Returns the amount of neighbours for
-     * a specific cell on the grid.
-     *
-     * @param {number} posX - the x position
-     * @param {number} posY - the Y position
-     * @return {number} neighbours - amount of neighbours
-     */
-    getNeighbours: function(posX, posY) {
+    getNeighbours(posX, posY) {
       let neighbours = 0;
       if (posX <= this.width && posY <= this.height) {
         for (let offsetX = -1; offsetX < 2; offsetX++) {
@@ -201,11 +156,7 @@ export default {
       }
       return neighbours;
     },
-    /**
-     * Resets all gridList cells back to the
-     * start value.
-     */
-    reset: function() {
+    reset() {
       this.currentTick = 0;
       this.cellsAlive = 0;
       this.cellsCreated = 0;
@@ -215,10 +166,7 @@ export default {
         });
       });
     },
-    /**
-     * Populates and overwrites gridList with cells.
-     */
-    randomSeed: function() {
+    randomSeed() {
       for (let i = 0; i < this.width; i++) {
         for (let j = 0; j < this.height; j++) {
           let rand = Math.random();
@@ -230,15 +178,7 @@ export default {
         }
       }
     },
-    /**
-     * Resets and then imports new cells into the gridList
-     * based on the importToken prop that gets passed down
-     * App.vue.
-     * The importToken is a string and its syntax looks
-     * like this:
-     * '[xPos,yPos],[xPos,yPos]...'.
-     */
-    importSession: function() {
+    importSession() {
       this.reset();
       let regex = /\[\d+,\d+\]/gm;
       let tempArr = this.importToken.match(regex);
@@ -250,12 +190,7 @@ export default {
         });
       }
     },
-    /**
-     * Uses gridList to create an exportToken and
-     * emits it up to App.vue for the user to copy.
-     * Same format as in importToken().
-     */
-    exportSession: function() {
+    exportSession() {
       let exportToken = [];
       for (let i = 0; i < this.width; i++) {
         for (let j = 0; j < this.height; j++) {
@@ -268,7 +203,7 @@ export default {
       }
       this.$emit('exportToken', exportToken);
     },
-    newGame: function() {
+    newGame() {
       let exportToken = [];
       for (let i = 0; i < this.width; i++) {
         for (let j = 0; j < this.height; j++) {
@@ -281,12 +216,7 @@ export default {
       }
       this.$emit("new_game", exportToken)
     },
-    /**
-     * Updates the current cellcount on each new tick.
-     *
-     * @param {boolean} bool - boolean based on cell isAlive status
-     */
-    updateCellCount: function(bool) {
+    updateCellCount(bool) {
       if (bool) {
         this.cellsAlive++;
         this.cellsCreated++;

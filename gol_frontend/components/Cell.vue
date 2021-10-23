@@ -29,23 +29,11 @@ export default {
   },
   data() {
     return {
-      // The status for a single cell.
-      // Sadly it is an anti pattern because ES2015 / Vue
-      // do have some problems to deal with a 2D-Array (not-reactive).
-      // If you have a different idea how to fix this create an issue :)
       isAlive: this.statusObj,
     };
   },
   methods: {
-    /**
-     * Checks if the cell has been clicked
-     * and switches its isAlive status.
-     * Also emits to the grid component for the
-     * drag and drop functionality.
-     *
-     * @param {boolean} bool - the isMouseDown boolean
-     */
-    reborn: function(bool) {
+    reborn(bool) {
       if (bool) {
         this.isAlive.isAlive = !this.isAlive.isAlive;
         this.$emit('wasUpdated', this.isAlive.isAlive);

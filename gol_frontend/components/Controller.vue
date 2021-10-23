@@ -1,18 +1,18 @@
 <template>
   <b-row>
     <b-button
-      :class="isRunning ? 'btn-danger m-2' : 'btn-success m-2'"
+      :class="isRunning ? 'btn-danger m-2' : 'btn-primary m-2'"
       title="play"
       @click="send('play')">
       <span v-show="isRunning">Stop</span>
-      <span v-show="!isRunning">Play</span>
+      <span v-show="!isRunning">Simulate Play</span>
     </b-button>
     <b-button
       class="btn-success m-2"
       title="new"
       v-if="newGame"
       @click="send('new_game')">
-      <span >Create New Game Game</span>
+      <span >Create New Game</span>
     </b-button>
     <b-button
       class='btn-success m-2'
@@ -28,13 +28,6 @@
       @click="send('set_next_step')">
       Transition to next state
     </b-button>
-    <b-button
-      class='btn-success m-2'
-      v-if="newGame"
-      title="import"
-      @click="send('import')">
-      Import
-    </b-button>
   </b-row>
 </template>
 
@@ -45,33 +38,20 @@ export default {
       default: false,
       type: Boolean,
     },
-    mainComponent: {
-      default: 'gamePage',
-      type: String,
-    },
     newGame: {
       default: false,
       type: Boolean,
     }
   },
-  data() {
-    return {};
-  },
   methods: {
-    /**
-     * emits the action that is requested
-     * by the client up to the App component.
-     *
-     * @param {string} event - the event
-     */
-    send: function(event) {
+    send(event) {
       this.$emit('send', event);
     },
   },
 };
 </script>
 
-  <style scoped>
+<style scoped>
 .box {
   padding: 0;
 }
