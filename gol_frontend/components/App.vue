@@ -208,6 +208,8 @@ export default {
       } else if (event === 'speedUp') {
         this.speed < 100 ? this.changeSpeed(20) : this.changeSpeed(100);
         this.restartInterval();
+      } else if (event === 'import') {
+        this.convertImport()
       } else {
         this.updateMessage(event);
       }
@@ -306,6 +308,21 @@ export default {
 
       let result = await this.LocalAllGames.methods.mint(2).send({from: this.accounts[0]})
       this.toggleActiveGame()
+    },
+    convertImport() {
+      const token = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      let returnString = ""
+      token.forEach((value, index) => {
+        if (index < 10 && value === 1) {
+          returnString += "[" + index + "," + 0 + "]"
+        } else if (value === 1) {
+          let splitIndex = index.toString().split("")
+          returnString += "[" + splitIndex[1] + "," + splitIndex[0] + "]"
+        }
+      })
+      this.importToken = returnString
+      this.isImport = true
+      this.importSession()
     },
     /**
      * Copies the text in the #copystring input

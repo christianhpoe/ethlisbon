@@ -28,6 +28,13 @@
       @click="send('set_next_step')">
       Transition to next state
     </b-button>
+    <b-button
+      class='btn-success m-2'
+      v-if="newGame"
+      title="import"
+      @click="send('import')">
+      Import
+    </b-button>
   </b-row>
 </template>
 
