@@ -256,22 +256,26 @@ export default {
      * Same format as in importToken().
      */
     exportSession: function() {
-      let exportToken = '';
+      let exportToken = [];
       for (let i = 0; i < this.width; i++) {
         for (let j = 0; j < this.height; j++) {
-          if (this.gridList[i][j].isAlive) {
-            exportToken += '[' + i + ',' + j + ']';
+          if (this.gridList[j][i].isAlive) {
+            exportToken.push(1) 
+          } else {
+            exportToken.push(0)
           }
         }
       }
       this.$emit('exportToken', exportToken);
     },
     newGame: function() {
-      let exportToken = '';
+      let exportToken = [];
       for (let i = 0; i < this.width; i++) {
         for (let j = 0; j < this.height; j++) {
-          if (this.gridList[i][j].isAlive) {
-            exportToken += '[' + i + ',' + j + ']';
+          if (this.gridList[j][i].isAlive) {
+            exportToken.push(1) 
+          } else {
+            exportToken.push(0)
           }
         }
       }

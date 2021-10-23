@@ -17,16 +17,16 @@ contract AllGames is ERC721, Ownable {
         uint8 _counterInitialInputs;
         bool _alive;
         uint256 _tokenId;
-        uint256 _state;
+        string _state;
     }
     
     /// Mapping from tokenId to Games
     mapping(uint256 => Single_Game) public games;
     
-    event StateChange(uint256 _tokenId, uint256 _state, address _gameAddress, bool _alive, uint8 _counterInitialInputs);
+    event StateChange(uint256 _tokenId, string _state, address _gameAddress, bool _alive, uint8 _counterInitialInputs);
     
     /// All Inputs go here
-    function inputState(uint256 _tokenId, uint256 _state) public {
+    function inputState(uint256 _tokenId, string memory _state) public {
         if (games[_tokenId]._alive == false) {
             _initialInputs(_tokenId, _state);
         } else {
@@ -36,24 +36,22 @@ contract AllGames is ERC721, Ownable {
     }
 
     function transitionToNewState(uint256 _tokenId) public {
-        /// TODO needs game of life logic
-        games[_tokenId]._gameContract.mint(msg.sender, 1);
+        games[_tokenId]._gameContract.mint(msg.sender, 1000000000000000000);
         emit StateChange(_tokenId, games[_tokenId]._state, address(games[_tokenId]._gameContract), games[_tokenId]._alive, games[_tokenId]._counterInitialInputs);
-
     }
 
-    ///DO: Set State to _state; Mint ERC20Token to msg.sender, counter + 1; If counter = 10 game alive
-    function _initialInputs(uint256 _tokenId, uint256 _state) private {
+    // Set State to _state; Mint ERC20Token to msg.sender, counter + 1; If counter = 10 game alive
+    function _initialInputs(uint256 _tokenId, string memory _state) private {
         require(games[_tokenId]._alive == false, "The game is already alive");
         games[_tokenId]._state = _state;
-        games[_tokenId]._gameContract.mint(msg.sender, 10);
+        games[_tokenId]._gameContract.mint(msg.sender, 10000000000000000000);
         games[_tokenId]._counterInitialInputs++;
         if (games[_tokenId]._counterInitialInputs == 10) {
             games[_tokenId]._alive = true;
         }
     }
-    
-    function _laterInputs(uint256 _tokenId, uint256 _state) private {
+
+    function _laterInputs(uint256 _tokenId, string memory _state) private {
         require(games[_tokenId]._alive == true, "The game is not yet alive");
         /// TODO require payment of ERC20 Tokens  
         /// TODO Burn Tokens by sending to nonce;
@@ -64,8 +62,8 @@ contract AllGames is ERC721, Ownable {
         return _tokenIdTracker.current();
     }
     
-    function mint(uint256 _state) public onlyOwner {
-        OneGame game = new OneGame(100, this, msg.sender);
+    function mint(string memory _state) public onlyOwner {
+        OneGame game = new OneGame(100000000000000000000, this, msg.sender);
         games[_tokenIdTracker.current()]._gameContract = game;
         games[_tokenIdTracker.current()]._tokenId = _tokenIdTracker.current();
         games[_tokenIdTracker.current()]._state = _state;

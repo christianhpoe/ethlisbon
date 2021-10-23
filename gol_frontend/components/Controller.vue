@@ -8,8 +8,9 @@
       <span v-show="!isRunning">Play</span>
     </b-button>
     <b-button
-      class="btn-success"
+      class="btn-success m-2"
       title="new"
+      v-if="newGame"
       @click="send('new_game')">
       <span >Create New Game Game</span>
     </b-button>
@@ -17,7 +18,7 @@
       class='btn-success m-2'
       v-if="!newGame"
       title="play"
-      @click="send('set_input')">
+      @click="send('set_newInput')">
       Set Input
     </b-button>
     <b-button

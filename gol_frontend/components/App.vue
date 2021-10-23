@@ -45,7 +45,8 @@
               <app-controller
                 :is-running="isRunning"
                 :main-component="mainComponent"
-                @send="delegate($event)"/>
+                @send="delegate($event)"
+                :newGame="createNewGame"/>     
             </div>
           </div>
         </div>
@@ -92,8 +93,8 @@ export default {
           sortable: true
         },
         {
-          key: '_tokenId',
-          label: 'Token Id of Game',
+          key: '_gameContract',
+          label: 'ERC20 Owner Contract',
           sortable: true
         },
         {
@@ -274,19 +275,36 @@ export default {
       this.exportToken = exportToken;
       this.isExport = true;
     },
+    /* convertFrontendToSolidityState(token) {
+      let newArray = []
+      token.forEach(subtoken => {
+        newArray.push(subtoken[0] + subtoken[1])
+      })
+      console.log("got here")
+      let finalArray = [];
+      for (let i = 0; i < 100; i++) {
+        if (newArray.includes(i)) {
+          finalArray.push(1)
+        } else {
+          finalArray.push(0)
+        }
+      }
+
+      return finalArray
+    },  */
     set_newInput: function(exportToken) {
       this.exportToken = exportToken;
       this.isExport = true;
-      console.log(this.exportToken)
+      console.log(exportToken)
       /// TODO Add set Input Web3
 
     },
     async exportNewGame(exportToken) {
       this.exportToken = exportToken;
       this.isExport = true;
-      console.log("I am a new game", this.exportToken)
+      console.log(exportToken)
+
       let result = await this.LocalAllGames.methods.mint(2).send({from: this.accounts[0]})
-      console.log(result)
       this.toggleActiveGame()
     },
     /**
