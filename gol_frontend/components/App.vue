@@ -1,7 +1,10 @@
 <template>
   <div class="GOL">
     <section class="hero primary-background is-fullheight">
-      <div v-if="loading">Loading...</div>
+      <div v-if="loading">
+        <h1 class="text-center">The App is loading...</h1>
+        <h1 class="text-center">Please authenticate with Metamask on the Ronkeby Test Network</h1>
+      </div>
       <div v-else class="hero-body m-4">
         <h5 class="text-left ml-3" v-if="activeGame" @click="toggleActiveGame()">Back</h5>
         <h1 class="text-center">Game of Life</h1>
