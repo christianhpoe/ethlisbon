@@ -9,14 +9,15 @@ contract States is Ownable{
     uint[] stateArray;
 
     constructor() {}
+    
     function nextState(uint256 _tokenId) public {
-        uint aliveNeighbors;
+        
         for(uint i = 0; i < 100; i++) {
             
-            aliveNeighbors = 0;
+            uint aliveNeighbors = 0;
             
-            /// Cell not touallching any edges
-            if (i > 9 && i < 90 && (i+1)%10 != 1 && (i+1)%10 != 0)  {
+            /// Cell not touching any edges
+            if (i > 9 && i < 90 && (i+1)%10 != 1 && (i+1)%10 != 0) {
                 
                 // left neighbor
                 if (states[_tokenId][i-1] == true) {
@@ -52,6 +53,150 @@ contract States is Ownable{
                 }
             }
             
+            // Top row 
+            if (i < 10) {
+                if (i == 0) { // top left
+                    // right neighbor
+                    if (states[_tokenId][i+1] == true) {
+                        aliveNeighbors++;
+                    }
+                    // bottom neighbor
+                    if (states[_tokenId][i+10] == true) {
+                        aliveNeighbors++;
+                    }
+                    // bottom right neighbor
+                    if (states[_tokenId][i+11] == true) {
+                        aliveNeighbors++;
+                    }
+                } else if (i == 9) { // top right
+                    // left neighbor
+                    if (states[_tokenId][i-1] == true) {
+                        aliveNeighbors++;
+                    }
+                    // bottom neighbor
+                    if (states[_tokenId][i+10] == true) {
+                        aliveNeighbors++;
+                    }
+                    // bottom left neighbor
+                    if (states[_tokenId][i+9] == true) {
+                        aliveNeighbors++;
+                    }
+                } else { // top middle cells
+                    // left neighbor
+                    if (states[_tokenId][i-1] == true) {
+                        aliveNeighbors++;
+                    }
+                    // right neighbor
+                    if (states[_tokenId][i+1] == true) {
+                        aliveNeighbors++;
+                    }
+                    // bottom left neighbor
+                    if (states[_tokenId][i+9] == true) {
+                        aliveNeighbors++;
+                    }
+                    // bottom right neighbor
+                    if (states[_tokenId][i+11] == true) {
+                        aliveNeighbors++;
+                    }
+                }
+            }
+            
+            // Bottom row 
+            if (i >= 90) {
+                if (i == 90) { // bottom left
+                    // right neighbor
+                    if (states[_tokenId][i+1] == true) {
+                        aliveNeighbors++;
+                    }
+                    // top neighbor
+                    if (states[_tokenId][i-10] == true) {
+                        aliveNeighbors++;
+                    }
+                    // top right neighbor
+                    if (states[_tokenId][i-9] == true) {
+                        aliveNeighbors++;
+                    }
+                } else if (i == 99) { // bottom right
+                    // left neighbor
+                    if (states[_tokenId][i-1] == true) {
+                        aliveNeighbors++;
+                    }
+                    // top neighbor
+                    if (states[_tokenId][i-10] == true) {
+                        aliveNeighbors++;
+                    }
+                    // top left neighbor
+                    if (states[_tokenId][i-11] == true) {
+                        aliveNeighbors++;
+                    }
+                } else { // bottom middle cells
+                    // left neighbor
+                    if (states[_tokenId][i-1] == true) {
+                        aliveNeighbors++;
+                    }
+                    // right neighbor
+                    if (states[_tokenId][i+1] == true) {
+                        aliveNeighbors++;
+                    }
+                    // top left neighbor
+                    if (states[_tokenId][i-11] == true) {
+                        aliveNeighbors++;
+                    }
+                    // top right neighbor
+                    if (states[_tokenId][i-9] == true) {
+                        aliveNeighbors++;
+                    }
+                }
+            }
+            
+            // left column
+            if ((i+1)%10 == 0 && i>10 && i<90) {
+                // right neighbor
+                if (states[_tokenId][i+1] == true) {
+                    aliveNeighbors++;
+                }
+                // top neighbor
+                if (states[_tokenId][i-10] == true) {
+                    aliveNeighbors++;
+                }
+                // bottom neighbor
+                if (states[_tokenId][i+10] == true) {
+                    aliveNeighbors++;
+                }
+                // top right neighbor
+                if (states[_tokenId][i-9] == true) {
+                    aliveNeighbors++;
+                }
+                // bottom right neighbor
+                if (states[_tokenId][i+11] == true) {
+                    aliveNeighbors++;
+                }
+            }
+            
+            // right column
+            if ((i+1)%10 == 1 && i>10 && i<90) {
+                // left neighbor
+                if (states[_tokenId][i-1] == true) {
+                    aliveNeighbors++;
+                }
+                // top neighbor
+                if (states[_tokenId][i-10] == true) {
+                    aliveNeighbors++;
+                }
+                // bottom neighbor
+                if (states[_tokenId][i+10] == true) {
+                    aliveNeighbors++;
+                }
+                // top left neighbor
+                if (states[_tokenId][i-11] == true) {
+                    aliveNeighbors++;
+                }
+                // bottom left neighbor
+                if (states[_tokenId][i+9] == true) {
+                    aliveNeighbors++;
+                }
+            }
+        
             /// Given number of alive neighbors move to next state
             if (states[_tokenId][i] == true) {
                 if (aliveNeighbors == 2 || aliveNeighbors == 3) {
