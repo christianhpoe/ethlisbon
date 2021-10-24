@@ -1,7 +1,4 @@
-build
 package-lock.json
-nuxt-app/node-modules
-nuxt-app/.editorconfig
 node_modules
 .env
 secret.json
