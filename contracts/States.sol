@@ -6,10 +6,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract States is Ownable{
     // TokenIds to State
     mapping(uint256 => mapping(uint256 => bool)) public states;
+
     uint[] stateArray;
+    mapping(uint256 => mapping(uint256 => bool)) public newStates;
 
     constructor() {}
-    
+
     function nextState(uint256 _tokenId) public {
         
         for(uint i = 0; i < 100; i++) {
@@ -200,17 +202,20 @@ contract States is Ownable{
             /// Given number of alive neighbors move to next state
             if (states[_tokenId][i] == true) {
                 if (aliveNeighbors == 2 || aliveNeighbors == 3) {
-                    states[_tokenId][i] = true;
+                    newStates[_tokenId][i] = true;
                 } else {
-                    states[_tokenId][i] = false;
+                    newStates[_tokenId][i] = false;
                 }
             } else {
                 if (aliveNeighbors == 3) {
-                    states[_tokenId][i] = true;
+                    newStates[_tokenId][i] = true;
                 } else {
-                    states[_tokenId][i] = false;
+                    newStates[_tokenId][i] = false;
                 }
             }
+        }
+        for (uint i = 0; i < 100; i++) {
+           states[_tokenId][i] = newStates[_tokenId][i]; 
         }
     }
     
@@ -222,6 +227,7 @@ contract States is Ownable{
             } else {
                 states[_tokenId][i] = true;
             }
+            newStates[_tokenId][i] = states[_tokenId][i];
         }
     }
     
