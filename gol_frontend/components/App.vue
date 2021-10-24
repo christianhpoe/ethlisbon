@@ -46,6 +46,7 @@
           <div class="columns ">
             <div class="column is-fullwidth">
               <app-controller
+                :alive="activeAlive"
                 :is-running="isRunning"
                 @send="delegate($event)"
                 :newGame="createNewGame"/>     
@@ -75,6 +76,7 @@ export default {
   },
   data() {
     return {
+      activeAlive: false,
       loading: true,
       accounts: null,
       networkId: null,
@@ -124,6 +126,7 @@ export default {
       this.createNewGame = false
       if (!this.activeGame) {
         this.activeId = null
+        this.activeAlive = false
       }
     },
     newGame() {
@@ -134,6 +137,7 @@ export default {
       this.convertImport(game.item._state)
       this.toggleActiveGame()
       this.activeId = game.item._tokenId
+      this.activeAlive = game.item._alive
       this.$nextTick(() => {
         this.import()
       })

@@ -23,7 +23,7 @@
     </b-button>
     <b-button
       class='btn-success m-2'
-      v-if="!newGame"
+      v-if="!newGame && alive"
       title="play"
       @click="send('set_next_step')">
       Transition to next state
@@ -39,6 +39,10 @@ export default {
       type: Boolean,
     },
     newGame: {
+      default: false,
+      type: Boolean,
+    },
+    alive: {
       default: false,
       type: Boolean,
     }
